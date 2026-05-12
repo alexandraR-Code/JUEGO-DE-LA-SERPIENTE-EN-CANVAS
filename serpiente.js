@@ -7,8 +7,24 @@ const ctx = canvas.getContext("2d");
 
 
 const TAMANIO_CELDA = 25;
-const lINEASX = canvas.width / TAMANIO_CELDA;
+const LINEASX = canvas.width / TAMANIO_CELDA;
 const LINEASY = canvas.height  / TAMANIO_CELDA;
+const serpiente = [
+  {LINEASX: 15, LINEASY:15},
+  {LINEASX: 15, LINEASY:16},
+  {LINEASX: 16, LINEASY:16},
+  {LINEASX: 17, LINEASY:16},
+  {LINEASX: 18, LINEASY:16},
+  {LINEASX: 19, LINEASY:16},
+  {LINEASX: 19, LINEASY:17},
+  {LINEASX: 19, LINEASY:18},
+  {LINEASX: 19, LINEASY:19},
+  {LINEASX: 18, LINEASY:19},
+  {LINEASX: 18, LINEASY:19},
+  {LINEASX: 17, LINEASY:19},
+  {LINEASX: 16, LINEASY:19},
+
+];
 
   // Primera pintura del juego al cargar la página
 dibujarTodo();
@@ -25,14 +41,7 @@ function limpiarCanvas() {
 function dibujarTodo() {
   limpiarCanvas();
   dibujarTablero()
-  pintarParte(5,5);
-  pintarParte(5,1);
-  pintarParte(0,3);
-  pintarParte(10,2);
-  pintarParte(15,23);
-  pintarParte(23,15);
-  pintarParte(0,15);
-  pintarParte(23,0);
+  pintarSerpiente();
 }
 
 function dibujarTablero(){
@@ -64,3 +73,26 @@ function pintarParte(LINEASX, LINEASY){
   ctx.strokeStyle = "#c522c5";
   ctx.strokeRect(pintar1, pintar2, TAMANIO_CELDA, TAMANIO_CELDA);
 }
+
+function pintarSerpiente(){
+  //CABEZA DE LA SERPIENTE
+  let cabeza = serpiente[0];
+  ctx.fillStyle = "red";
+ 
+  ctx.fillRect(cabeza.LINEASX*TAMANIO_CELDA,
+     cabeza.LINEASY*TAMANIO_CELDA,
+      TAMANIO_CELDA,
+      TAMANIO_CELDA);
+  // CUERPO DE LA SERPIENTE 
+  ctx.fillStyle ="green";
+  //Como va a pintar el cuerpo de la serpiente, recorre el array de la serpiente y pinta cada parte del cuerpo 
+
+  for(let i=1; i<serpiente.length; i++){
+    ctx.fillRect(serpiente[i].LINEASX*TAMANIO_CELDA,
+       serpiente[i].LINEASY*TAMANIO_CELDA,
+        TAMANIO_CELDA,
+        TAMANIO_CELDA);
+  }
+ 
+}
+

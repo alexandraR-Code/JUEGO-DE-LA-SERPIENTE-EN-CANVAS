@@ -27,6 +27,10 @@ const serpiente = [
 ];
 let intervaloSerpiente; // variable que almacena el intervalo del movimiento  de la serpiente 
 let direccionActual = "derecha"; // Guarada la ultima direccion seleccionada 
+let comidaX;
+let comidaY;
+let puntaje = 0;
+
 
   // Primera pintura del juego al cargar la página
 dibujarTodo();
@@ -69,10 +73,10 @@ function dibujarTablero(){
     ctx.stroke();
   }
 }
-function pintarParte(LINEASX, LINEASY){
+function pintarParte(LINEASX, LINEASY, color){
   let pintar1 = LINEASX*TAMANIO_CELDA;
   let pintar2 = LINEASY*TAMANIO_CELDA;
-  ctx.fillStyle = "yellow";
+  ctx.fillStyle = color;
   ctx.fillRect(pintar1, pintar2, TAMANIO_CELDA, TAMANIO_CELDA);
   ctx.strokeStyle = "#c522c5";
   ctx.strokeRect(pintar1, pintar2, TAMANIO_CELDA, TAMANIO_CELDA);
@@ -147,43 +151,48 @@ function iniciarJuego(){
   intervaloSerpiente = setInterval(moverSerpiente, 1000); 
 }
 function pausarJuego(){
-  clearInterval(intervaloSerpiente); // detiene el intervalos del movimieto de la serpiente 
+  // detiene el intervalos del movimieto de la serpiente 
+  clearInterval(intervaloSerpiente); 
 }
 function moverSerpiente(){
-  //por ahora solo imprimimos para probar que funcione 
-  if(direccionActual === 'derecha'){
-    moverDerecha();
-  }else if(direccionActual === 'izquierda'){
-    moverIzquierda();
-  }else if(direccionActual === 'arriba'){
-    moverArriba();
-  }else if(direccionActual === 'abajo'){
-    moverAbajo();
+  //Dependiendo de la direccion actual, se llama a la funcion correspondiente para mover
+  if(direccionActual === 'derecha'){moverDerecha();
+  }else if(direccionActual === 'izquierda'){moverIzquierda();
+  }else if(direccionActual === 'arriba'){moverArriba();
+  }else if(direccionActual === 'abajo'){moverAbajo(); 
   }
+  //redibuja la serpiente en una nueva posicion 
   pintarSerpiente();
-  ///let puntaje = 0;
-  //document.getElementById("puntaje").innerText = `Puntaje: ${puntaje}`;
-  //if(atraparComida() == true){
-    //  puntaje++;
-    //}
+  
+  //Verifica si la cabeza d ela serpente toco la comida 
+  if(atraparComida() == true){
+    //Si atrapo la comida, suma 1  al puntaje
+    puntaje++;
+     //Si atrapo la comida la serpiente crece, agregamos un nuevo segmento al final
+    serpiente.push(serpiente[serpiente.length - 1]);
+  }
+  //Actualiza el puntaje en el HTML 
+  document.getElementById("puntaje").innerText = puntaje;  
 }
 function pintarComida(){
   // Generar coodernaas aeleatorias para la comida
-  let comidaX = Math.floor(Math.random() * canvas.width / TAMANIO_CELDA);
-  let comidaY = Math.floor(Math.random() * canvas.height / TAMANIO_CELDA);
+  comidaX = Math.floor(Math.random() * canvas.width / TAMANIO_CELDA);
+  comidaY = Math.floor(Math.random() * canvas.height / TAMANIO_CELDA);
   
   // pintamos la comida en el canvas con diferencia de color
-  ctx.fillStyle = "orange";
-  pintarParte(comidaX, comidaY);
+  pintarParte(comidaX, comidaY, "orange");
 }
 function atraparComida(){
   // verificar si la cabeza de la serpiente toca la comida 
   if(serpiente[0].LINEASX === comidaX && serpiente[0].LINEASY === comidaY){
     // si atrapa la comida retorna true 
+    console.log("Comida atrapada");
     return true;
   }else{
     // si no atrapa la comida retorna false
+    console.log("Comida no atrapada");
     return false;
   }
+  
 
 }

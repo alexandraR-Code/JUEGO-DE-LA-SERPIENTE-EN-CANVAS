@@ -26,7 +26,7 @@ const serpiente = [
 
 ];
 let intervaloSerpiente; // variable que almacena el intervalo del movimiento  de la serpiente 
-
+let direccionActual = "derecha"; // Guarada la ultima direccion seleccionada 
 
   // Primera pintura del juego al cargar la página
 dibujarTodo();
@@ -44,6 +44,8 @@ function dibujarTodo() {
   limpiarCanvas();
   dibujarTablero();
   pintarSerpiente();
+  pintarComida();
+  
 }
 
 function dibujarTablero(){
@@ -111,17 +113,12 @@ function moverDerecha(){
 function cambiarDireccion(direccion){
   //"direccion" puede llegar como derecha, arriba, abajo, izquierda
   //Indicamos cual llego para saber cual es la correcta
-  if(direccion === 'derecha'){
-    moverDerecha(); // solo se llama si llego la derecha
-  }else if(direccion === 'izquierda'){
-    moverIzquierda();
-  }else if(direccion === 'arriba'){
-    moverArriba();
-  }else if(direccion === 'abajo'){
-    moverAbajo();
-  };
-  pintarSerpiente();
+  //if(direccionActual === 'derecha'){
+   // moverDerecha(); // solo se llama si llego la derecha
+   // Actualiza la direccion actual para evitar movimientos invalidos 
+  direccionActual = direccion; 
 }
+
 function moverIzquierda(){
   let nuevaCabeza = {
   LINEASX: serpiente[0].LINEASX -1,
@@ -154,5 +151,39 @@ function pausarJuego(){
 }
 function moverSerpiente(){
   //por ahora solo imprimimos para probar que funcione 
-  console.log("movimiento");
+  if(direccionActual === 'derecha'){
+    moverDerecha();
+  }else if(direccionActual === 'izquierda'){
+    moverIzquierda();
+  }else if(direccionActual === 'arriba'){
+    moverArriba();
+  }else if(direccionActual === 'abajo'){
+    moverAbajo();
+  }
+  pintarSerpiente();
+  ///let puntaje = 0;
+  //document.getElementById("puntaje").innerText = `Puntaje: ${puntaje}`;
+  //if(atraparComida() == true){
+    //  puntaje++;
+    //}
+}
+function pintarComida(){
+  // Generar coodernaas aeleatorias para la comida
+  let comidaX = Math.floor(Math.random() * canvas.width / TAMANIO_CELDA);
+  let comidaY = Math.floor(Math.random() * canvas.height / TAMANIO_CELDA);
+  
+  // pintamos la comida en el canvas con diferencia de color
+  ctx.fillStyle = "orange";
+  pintarParte(comidaX, comidaY);
+}
+function atraparComida(){
+  // verificar si la cabeza de la serpiente toca la comida 
+  if(serpiente[0].LINEASX === comidaX && serpiente[0].LINEASY === comidaY){
+    // si atrapa la comida retorna true 
+    return true;
+  }else{
+    // si no atrapa la comida retorna false
+    return false;
+  }
+
 }

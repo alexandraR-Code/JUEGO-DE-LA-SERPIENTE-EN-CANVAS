@@ -25,6 +25,8 @@ const serpiente = [
   {LINEASX: 16, LINEASY:19},
 
 ];
+let intervaloSerpiente; // variable que almacena el intervalo del movimiento  de la serpiente 
+
 
   // Primera pintura del juego al cargar la página
 dibujarTodo();
@@ -40,7 +42,7 @@ function limpiarCanvas() {
 
 function dibujarTodo() {
   limpiarCanvas();
-  dibujarTablero()
+  dibujarTablero();
   pintarSerpiente();
 }
 
@@ -95,4 +97,62 @@ function pintarSerpiente(){
   }
  
 }
-
+function moverDerecha(){
+  //serpiente[0] es la cabeza actual 
+  //Para ir a la derecha, sumamos 1 solo en x (Columna)
+  //Se queda en la misma posicion porque no subimos ni bajamos 
+  let nuevaCabeza ={
+    LINEASX: serpiente[0].LINEASX + 1, //Una celda a la derecha
+    LINEASY: serpiente[0].LINEASY      //misma fila
+  };
+  serpiente.unshift(nuevaCabeza); //Agregamos la nueva cabeza al inicio del arreglo
+  serpiente.pop();                //Eliminamos la ultima parte de la serpiente 
+}
+function cambiarDireccion(direccion){
+  //"direccion" puede llegar como derecha, arriba, abajo, izquierda
+  //Indicamos cual llego para saber cual es la correcta
+  if(direccion === 'derecha'){
+    moverDerecha(); // solo se llama si llego la derecha
+  }else if(direccion === 'izquierda'){
+    moverIzquierda();
+  }else if(direccion === 'arriba'){
+    moverArriba();
+  }else if(direccion === 'abajo'){
+    moverAbajo();
+  };
+  pintarSerpiente();
+}
+function moverIzquierda(){
+  let nuevaCabeza = {
+  LINEASX: serpiente[0].LINEASX -1,
+  LINEASY: serpiente[0].LINEASY
+};
+serpiente.unshift(nuevaCabeza);
+serpiente.pop();
+}
+function moverArriba(){
+  let nuevaCabeza = {
+    LINEASX: serpiente[0].LINEASX,
+    LINEASY: serpiente[0].LINEASY - 1,
+  };
+  serpiente.unshift(nuevaCabeza);
+  serpiente.pop();
+}
+function moverAbajo(){
+  let nuevaCabeza = {
+    LINEASX: serpiente[0].LINEASX,
+    LINEASY: serpiente[0].LINEASY + 1,
+  };
+  serpiente.unshift(nuevaCabeza);
+  serpiente.pop();
+}
+function iniciarJuego(){
+  intervaloSerpiente = setInterval(moverSerpiente, 1000); 
+}
+function pausarJuego(){
+  clearInterval(intervaloSerpiente); // detiene el intervalos del movimieto de la serpiente 
+}
+function moverSerpiente(){
+  //por ahora solo imprimimos para probar que funcione 
+  console.log("movimiento");
+}
